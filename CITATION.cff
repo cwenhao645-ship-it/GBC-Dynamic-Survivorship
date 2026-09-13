@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Please cite this software and the associated article when available."
+type: software
+title: "Conditional Mortality and Survival Gap in Resected Nonmetastatic Gallbladder Adenocarcinoma"
+authors:
+  - family-names: Chen
+    given-names: Wenhao
+  - family-names: Wei
+    given-names: Jinlu
+  - family-names: Wang
+    given-names: Zhanjin
+  - family-names: Pan
+    given-names: Peng
+  - family-names: Du
+    given-names: Kaihao
+  - family-names: Xue
+    given-names: Weiwei
+  - family-names: Wang
+    given-names: Zhan
+date-released: 2026-09-12
+license: MIT
+abstract: "Analysis code with final submission output mapping; patient-level SEER data are not included. End-to-end execution limitations are documented."

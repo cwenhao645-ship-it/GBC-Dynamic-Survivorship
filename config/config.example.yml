@@ -1,0 +1,22 @@
+# Copy outside the repository and replace every placeholder.
+project_root: "<PRIVATE_WORKING_COPY_ROOT>"
+code_root: "<PUBLIC_CODE_ROOT>"
+preparation_root: "<PRIVATE_PREPARATION_ROOT>"
+seer_mapping: "<PRIVATE_SEER_MAPPING_YML>"
+python: "<PYTHON_EXECUTABLE_WITH_PYARROW_AND_PANDAS>"
+runtime_root: "<ORIGINAL_WORKBOOK_RUNTIME_ROOT>"
+user_library_root: "<PRIVATE_R_LIBRARY_ROOT>"
+# These record fixed study specifications; they do not override method constants.
+R_version: "4.4.3"
+stage1_seed: 20260904
+model_seed: 20260905
+development_bootstrap_attempts: 500
+other_bootstrap_attempts: 1000
+# Existing hash guards are retained. Public code relocation changes library hashes.
+# Do not delete assertions or set new hashes merely to make a run proceed.
+
+
+# Optional output-only paths (no patient data); set directly with Sys.setenv
+# when running only the submission workflow.
+submission_output: "/path/to/private/submission"
+figure3_source: "/path/to/private/Figure3_Group_CIF.csv"

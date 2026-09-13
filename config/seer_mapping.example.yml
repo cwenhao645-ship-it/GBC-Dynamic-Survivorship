@@ -1,0 +1,231 @@
+# Source coding configuration. Final eligibility is stage1_burden.build_cohort(), explicit M0 only.
+# Summary-stage categories below are concordance descriptors, NOT an extra main-cohort filter.
+schema_version: 1
+input:
+  csv: <AUTHORIZED_SEER_CSV>
+  dic: <AUTHORIZED_SEER_DIC>
+  encoding: utf-8-sig
+  csv_sha256: "<AUTHORIZED_EXPORT_SHA256>"
+  dic_sha256: "<AUTHORIZED_EXPORT_SHA256>"
+  reference_rows: 21219
+  reference_columns: 212
+  database_required: 'Incidence - SEER Research Data, 17 Registries, Nov 2025 Sub (2000-2023)'
+design:
+  diagnosis_years: [2004, 2023]
+  primary_site_codes: ['239', 'C239', 'C23.9']
+  malignant_labels: ['Malignant', '3']
+  minimum_age: 18
+  topcoded_age: 90
+  summary_stage_policy: explicit_M0_only_V2
+  t4_merge_policy: merge_T3_T4
+  cutoff: '2023-12-31'
+  days_per_year: 365.25
+  prediction_horizon_years: 3
+  zero_day_correction: 0.5
+  landmarks_primary: [0, 1, 2, 3]
+  landmarks_exploratory: [4, 5]
+  primary_prediction_years: [2004, 2017]
+  contemporary_short_horizon_years: 1
+  temporal_roles:
+    DEVELOPMENT: [2004, 2011]
+    RECALIBRATION: [2012, 2014]
+    TEMPORAL_EVALUATION: [2015, 2017]
+    CONTEMPORARY_SUPPLEMENT: [2018, 2023]
+  coding_eras:
+    '2004-2009': [2004, 2009]
+    '2010-2015': [2010, 2015]
+    '2016-2017': [2016, 2017]
+    '2018-2022': [2018, 2022]
+    '2023': [2023, 2023]
+  size_missingness_eras:
+    '2004-2009': [2004, 2009]
+    '2010-2015': [2010, 2015]
+    '2016-2017': [2016, 2017]
+    '2018-2020': [2018, 2020]
+    '2021-2023': [2021, 2023]
+columns:
+  patient_id: Patient ID
+  year_dx: Year of diagnosis
+  age: Age recode with single ages and 90+
+  sex: Sex
+  race: Race and origin recode (NHW, NHB, NHAIAN, NHAPI, Hispanic)
+  marital: Marital status at diagnosis
+  site: Primary Site
+  histology: Histologic Type ICD-O-3
+  histology_label: ICD-O-3 Hist/behav
+  behavior: Behavior code ICD-O-3
+  confirmation: Diagnostic Confirmation
+  primary: Primary by international rules
+  sequence: Sequence number
+  record_number: Record number recode
+  summary: Combined Summary Stage with Expanded Regional Codes (2004+)
+  size: Tumor Size Over Time Recode (1988+)
+  nodes_exam: Regional nodes examined (1988+)
+  nodes_pos: Regional nodes positive (1988+)
+  chemo: Chemotherapy recode (yes, no/unk)
+  radiation: Radiation recode
+  survival_days: Survival Days
+  survival_months: Survival months
+  survival_flag: Survival months flag
+  vital: Vital status recode (study cutoff used)
+  cancer_cod: SEER cause-specific death classification
+  other_cod: SEER other cause of death classification
+semantic:
+  states: [OBSERVED, TRUE_ZERO, UNKNOWN, NOT_ASSESSED, NOT_APPLICABLE, STRUCTURAL_BLANK, ERA_NOT_AVAILABLE, INVALID, CONFLICT]
+  blank_labels: ['', 'Blank(s)', 'Blank']
+  unavailable_labels: [Recode not available]
+  export_missing_marker: NA
+  stage_na_labels: ['NA', 'N/A', 'Not applicable', '88']
+  stage_unknown_labels: ['TX', 'NX', 'MX', 'Unknown', 'cX', 'pX']
+  unknown_pattern: '(?i)unknown|unstaged|unspecified/DCO|cannot be assessed|cannot be determined|not stated'
+  not_assessed_pattern: '(?i)^not assessed|^not calculated'
+  not_applicable_pattern: '(?i)not applicable|^N/A|^NA$'
+demographics:
+  sex: {Male: Male, Female: Female, Unknown: Unknown}
+  race:
+    Non-Hispanic White: NHW
+    Non-Hispanic Black: NHB
+    Non-Hispanic Asian or Pacific Islander: NHAPI
+    Non-Hispanic American Indian/Alaska Native: NHAIAN
+    Hispanic (All Races): Hispanic
+    Non-Hispanic Unknown Race: Unknown
+  marital:
+    Married (including common law): Married
+    Single (never married): Single
+    Divorced: Divorced/Separated
+    Separated: Divorced/Separated
+    Widowed: Widowed
+    Unknown: Unknown/Other
+    Unmarried or Domestic Partner: Unknown/Other
+histology:
+  strict_codes: [8140]
+  confirmation_labels: [Positive histology]
+  primary_labels: ['Yes']
+  first_primary_labels: [One primary only, 1st of 2 or more primaries]
+  broad_definition: SEER Rare Cancer Classification 15.1 / code 60, malignant C239 only
+  broad_source: https://seer.cancer.gov/seerstat/variables/seer/raresiterecode/
+  broad_ranges: '8020-8022,8050,8140-8141,8143-8144,8147,8160-8162,8190,8200-8201,8210-8211,8221,8230-8231,8255,8260-8263,8290,8310,8315,8320,8323,8333,8380-8384,8430,8440-8441,8450,8470,8480-8482,8490,8500,8503-8504,8510,8512,8514,8525,8542,8550-8551,8560,8562,8570-8576'
+surgery:
+  old_column: RX Summ--Surg Prim Site (1998-2022)
+  new_column: RX Summ--Surg Prim Site 2023 (2023+)
+  new_start: 2023
+  strict_codes: ['30', '40', '60', A300, A400, A600]
+  broad_add_codes: ['20', '21', '22', '23', '24', '25', '26', '27', A200, A210, A220, A230, A240, A250, A260, A270]
+  code_groups:
+    No surgery: ['00', A000]
+    Destruction: ['10', '11', '12', '13', '14', A100, A110, A120, A130, A140]
+    Local excision or excisional biopsy: ['20', '21', '22', '23', '24', '25', '26', '27', A200, A210, A220, A230, A240, A250, A260, A270]
+    Simple or partial removal: ['30', A300]
+    Total removal: ['40', A400]
+    Radical or en bloc: ['60', A600]
+    Debulking: ['50', A500]
+    Surgery NOS: ['90', A900]
+    Unknown: ['99', A990]
+  source_old: https://seer.cancer.gov/archive/manuals/2022/AppendixC/Surgery_Codes_Other_Sites_2022.pdf
+  source_new: https://seer.cancer.gov/manuals/2023/AppendixC/Surgery_Codes_Other_Sites_2023.pdf
+stage:
+  T_model_mapping: {T1: T1, T2: T2, T3: T3/4, T4: T3/4, Unknown: Unknown}
+  N_model_mapping: {N0: N0, N1: N+, N2: N+, N3: N+, Unknown: Unknown}
+  summary_collapsed_mapping: {Localized: Localized, Regional direct: Regional, Regional nodes: Regional, Regional both: Regional, Distant: Distant, Unknown: Unknown}
+  main_summary_categories: [Localized, Regional]
+  unknown_sensitivity_summary_categories: [Localized, Regional, Unknown]
+  nonstandard_T_values: [T0, TIS]
+  sources:
+    AJCC6:
+      years: [2004, 2009]
+      T: Derived AJCC T, 6th ed (2004-2015)
+      N: Derived AJCC N, 6th ed (2004-2015)
+      M: Derived AJCC M, 6th ed (2004-2015)
+    AJCC7:
+      years: [2010, 2015]
+      T: Derived AJCC T, 7th ed (2010-2015)
+      N: Derived AJCC N, 7th ed (2010-2015)
+      M: Derived AJCC M, 7th ed (2010-2015)
+    SEER_COMBINED_2016_17:
+      years: [2016, 2017]
+      T: Derived SEER Combined T (2016-2017)
+      N: Derived SEER Combined N (2016-2017)
+      M: Derived SEER Combined M (2016-2017)
+    EOD2018:
+      years: [2018, 2023]
+      T: Derived EOD 2018 T Recode (2018+)
+      N: Derived EOD 2018 N Recode (2018+)
+      M: Derived EOD 2018 M Recode (2018+)
+  normalized_values:
+    T: ['0','IS','1','1A','1B','1NOS','2','2A','2B','3','4','4A','4B','X']
+    N: ['0','1','2','3','X']
+    M: ['0','1','X']
+  summary_mapping:
+    Localized only: Localized
+    Regional by direct extension only: Regional direct
+    Regional lymph nodes involved only: Regional nodes
+    Regional by both direct extension and lymph node involvement: Regional both
+    Distant site(s)/node(s) involved: Distant
+    Unknown/unstaged/unspecified/DCO: Unknown
+  explicit_non_distant: [Localized, Regional direct, Regional nodes, Regional both]
+grade:
+  switch_year: 2018
+  old_column: Grade Recode (thru 2017)
+  new_column: Derived Summary Grade 2018 (2018+)
+  mapping:
+    Well differentiated; Grade I: G1
+    Moderately differentiated; Grade II: G2
+    Poorly differentiated; Grade III: G3/4
+    Undifferentiated; anaplastic; Grade IV: G3/4
+    Site-specific grade system category (1): G1
+    Site-specific grade system category (2): G2
+    Site-specific grade system category (3): G3/4
+    Well differentiated: G1
+    Moderately differentiated: G2
+    Poorly differentiated: G3/4
+    Undifferentiated and anaplastic: G3/4
+    Grade cannot be assessed; Unknown: Unknown
+    Unknown: Unknown
+  non_epithelial_labels: [B-cell; pre-B; B-precursor, T-cell, Not applicable (Hematopoietic neoplasms only)]
+size:
+  exact_range: [1,400]
+  labels:
+    '000 (no evidence of primary tumor)': NO_PRIMARY_EVIDENCE
+    '990 (microscopic focus)': MICROSCOPIC_FOCUS
+    '998': SITE_SPECIFIC
+    'Unknown or size unreasonable (includes any tumor sizes 401-989)': UNKNOWN
+    'Tumor Size Not Consistent Over Time or Not Applicable for this Site': NOT_APPLICABLE/INCONSISTENT
+    '999': UNKNOWN
+    'XX1': NOT_APPLICABLE/INCONSISTENT
+nodes:
+  exact_min: 0
+  exact_max: 89
+  lower_bound_code: 90
+  group_cut: 6
+  lodds_continuity: 0.5
+  examined_special: {'90': AT_LEAST_90, '95': ASPIRATION_OR_CORE_ONLY, '96': SAMPLING_COUNT_UNKNOWN, '97': DISSECTION_COUNT_UNKNOWN, '98': EXAMINED_COUNT_UNKNOWN, '99': UNKNOWN}
+  positive_special: {'90': AT_LEAST_90, '95': POSITIVE_ASPIRATION, '97': POSITIVE_COUNT_UNKNOWN, '98': NOT_ASSESSED, '99': UNKNOWN}
+treatment:
+  chemo: {'Yes': 'Yes', No/Unknown: No/Unknown}
+  radiation_yes: [Beam radiation, 'Radiation, NOS  method or source not specified', Radioisotopes (1988+), Radioactive implants (includes brachytherapy) (1988+), Combination of beam with implants or isotopes]
+  radiation_other: [None/Unknown, Refused (1988+), 'Recommended, unknown if administered']
+outcome:
+  vital_alive: Alive
+  vital_dead: Dead
+  cancer_event: Dead (attributable to this cancer dx)
+  cancer_none: Alive or dead of other cause
+  other_event: Dead (attributable to causes other than this cancer dx)
+  other_none: Alive or dead due to cancer
+  unknown_cod: Dead (missing/unknown COD)
+  survival_unknown: [Unknown, NA, '']
+predictors:
+  core: [age_dx, sex, T_model, N_model, grade_model]
+  extended: [tumor_size_mm, node_assessment_group]
+  adjustment_candidates: [race_ethnicity]
+  descriptive: [marital_status, chemotherapy, radiation, surgery_group]
+  forbidden: [event_os, event_competing, survival_days_analysis, survival_years, unknown_cod_flag, year_followup]
+  baseline_characteristics_categorical: [sex, age_group, race_ethnicity, marital_status, coding_era, temporal_role, surgery_group, T_harmonized_fine, T_model, N_model, grade_model, tumor_size_status, node_assessment_group, chemotherapy, radiation, first_primary_flag]
+  baseline_characteristics_continuous: [age_dx, tumor_size_mm, nodes_examined, nodes_positive]
+audit:
+  leakage_name_pattern: '(?i)survival|vital status|cause.*death|cause of death|follow.up|last contact|dead|COD to site'
+  post_baseline_name_pattern: '(?i)RX Summ|chemotherapy|radiation|sequence number|primary by international|diagnostic confirmation'
+  other_site_name_pattern: '(?i)breast|prostate|PSA|Gleason|Breslow|HER2|Oncotype|estrogen receptor|progesterone receptor|lymphoma|leukemia|myeloma|melanoma|cervix|testis|testicular'
+  unused_default_reason: UNKNOWN_ENCODING
+  unused_default_note: Not whitelisted for this study; field-specific meaning/prediction-time availability not validated
+
+
