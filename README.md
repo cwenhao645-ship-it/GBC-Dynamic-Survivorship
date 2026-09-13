@@ -3,7 +3,7 @@
 ## Overview
 Source code for a population-based study of changing mortality burden among survivors of resected, explicitly M0 gallbladder adenocarcinoma, NOS (ICD-O-3 morphology code 8140/3).
 
-This code-only repository is prepared for manual upload. It has not been uploaded by this workflow. The final output mapping is synchronized; an independently executable end-to-end analysis is not certified. Known environment, aggregate-input and provenance limitations are documented in docs/reproducibility_notes.md.
+This repository contains the analysis code accompanying the study. The final output mapping is synchronized with the current manuscript structure; a fully self-contained end-to-end execution is not provided because authorized SEER patient-level inputs are not distributed.
 
 ## Repository Scope
 This repository contains analysis code only. No patient-level SEER data are included. No result workbooks, fitted models, manuscript documents, or source-data tables are distributed. File names retained inside readers identify required private inputs, not files included in the repository.
