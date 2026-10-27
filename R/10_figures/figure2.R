@@ -1,7 +1,13 @@
 # Publication source copy. See docs/original_script_mapping.md and reproducibility_notes.md.
 PROJECT_ROOT <- Sys.getenv("GBC_FINAL_RUN_ROOT", unset = getwd())
+if (!nzchar(Sys.getenv("GBC_SUBMISSION_OUTPUT", "")))
+  stop("Set GBC_SUBMISSION_OUTPUT to a separate private display output directory before sourcing this output-only file.")
 
 local({
+  config <- file.path(Sys.getenv('GBC_CODE_ROOT',getwd()),
+    'scripts/current_kernels/public_config.R')
+  if (!file.exists(config)) stop('Set GBC_CODE_ROOT to the public checkout root.')
+  source(config, local=TRUE)
   packages <- c("ggplot2", "patchwork", "readxl", "scales", "ragg")
   minimum <- c(ggplot2 = "3.5.2", patchwork = "1.3.2")
   installed_version <- function(p) {
@@ -313,11 +319,12 @@ local({
                            plot.tag.position = "topleft",
                            plot.margin = margin(5, 7, 6, 5))
 
-  OUTPUT_DIR <- file.path(Sys.getenv("GBC_SUBMISSION_OUTPUT", unset = file.path(PROJECT_ROOT, "submission")), "Main")
-  if (!dir.exists(OUTPUT_DIR)) {
-    dir.create(OUTPUT_DIR, recursive = TRUE)
-  }
+  OUTPUT_DIR <- file.path(Sys.getenv("GBC_SUBMISSION_OUTPUT"), "Main")
+  if (!dir.exists(OUTPUT_DIR)) stop('Create the private Main output directory before exporting.')
+  invisible(lapply(file.path(OUTPUT_DIR,c('Figure2_Final.pdf','Figure2_Final.tiff',
+    'Figure2_preview.png')),gbc_new_output_path))
   save_plot <- function(path, type) {
+    path <- gbc_new_output_path(path)
     if (type == "pdf") {
       grDevices::cairo_pdf(path, width = 180 / 25.4, height = 165 / 25.4,
                           family = "Arial", bg = "white", onefile = TRUE)

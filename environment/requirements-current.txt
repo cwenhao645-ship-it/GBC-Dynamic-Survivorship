@@ -1,0 +1,6 @@
+# Current analysis Python; original Stage1 used a separate recorded environment.
+numpy==2.4.2
+pandas==2.3.3
+pyarrow==23.0.1
+openpyxl==3.1.5
+PyYAML==6.0.3

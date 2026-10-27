@@ -1,5 +1,8 @@
 # Source coding configuration. Final eligibility is stage1_burden.build_cohort(), explicit M0 only.
 # Summary-stage categories below are concordance descriptors, NOT an extra main-cohort filter.
+# Historical primary/exploratory landmark labels and temporal prediction roles
+# are retained for preparation-source compatibility, not the BMC display plan.
+# Current descriptive main analysis uses all L0-L5; retired model roles are legacy.
 schema_version: 1
 input:
   csv: <AUTHORIZED_SEER_CSV>

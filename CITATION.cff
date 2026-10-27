@@ -1,7 +1,9 @@
 cff-version: 1.2.0
 message: "Please cite this software and the associated article when available."
 type: software
-title: "Conditional Mortality and Survival Gap in Resected Nonmetastatic Gallbladder Adenocarcinoma"
+title: "GBC Dynamic Survivorship: BMC Gastroenterology submission code"
+repository-code: "https://github.com/cwenhao645-ship-it/GBC-Dynamic-Survivorship"
+version: "2026.10.27-bmc-submission"
 authors:
   - family-names: Chen
     given-names: Wenhao
@@ -17,6 +19,6 @@ authors:
     given-names: Weiwei
   - family-names: Wang
     given-names: Zhan
-date-released: 2026-09-12
+date-released: 2026-10-28
 license: MIT
-abstract: "Analysis code with final submission output mapping; patient-level SEER data are not included. End-to-end execution limitations are documented."
+abstract: "Diagnosis-origin dynamic competing-risk survivorship, matched population RMST deficit, age/sex-standardized pathology contrasts, unified-cohort sensitivity, descriptive surgery-code audit and L0 non-PH sensitivity. Current-manuscript and full-run limitations are explicit; no patient-level SEER data are distributed."

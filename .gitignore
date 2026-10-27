@@ -34,6 +34,7 @@
 *.tsv
 *.txt
 !/environment/sessionInfo.txt
+!/environment/requirements-current.txt
 *.dic
 *.xlsx
 *.xls
@@ -71,3 +72,41 @@ Thumbs.db
 
 
 /submission/
+
+# Defense in depth: inspect actual tracked/index/history contents as well.
+**/data_raw/
+**/data_clean/
+**/data_external/
+**/private/
+*.feather
+*.arrow
+*.fst
+*.qs
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.jsonl
+*.ndjson
+*_results.json
+*_aggregate*.json
+*.joblib
+*.tar
+*.gz
+*.7z
+*.rar
+*.jpg
+*.jpeg
+*.tif
+*.Rout
+*.bak
+*.tmp
+config/*.local.*
+config/seer_mapping.yml
+config/config.yml
+.netrc
+.git-credentials
+id_rsa*
+id_ed25519*
+*.crt
+*.credential*

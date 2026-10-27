@@ -1,28 +1,56 @@
-# Reproducibility limitations and execution gates
+# Reproducibility boundaries and required private inputs
 
-## What is preserved
-The repository contains the existing mathematical implementations, not rewritten estimators. Public changes are file organization, path configuration, comment cleanup, source-safe defaults and publication input parameterization. Main outcome analysis, model fitting and formal bootstraps were not run while preparing this copy. Patient data, models and results are not bundled.
+## Claim supported by this release
 
-## Gates before claiming end-to-end analysis reproduction
-1. **Workbook backend:** model exporters depend on @oai/artifact-tool; the observed package is marked private. A public supported replacement or lawful redistributable dependency must be provided and tested at the I/O layer without changing numerical results. A package list alone does not resolve this.
-2. **Aggregation provenance:** the project contains FINAL_RESULTS_MASTER.xlsx and the frozen predecessor summary matrices, but a complete independent generator for that exact current master/14-table input was not found. The historical table script generates a different set and is excluded. publication_tables.matrices() now assembles the final 11 eTables, and its CLI copies the frozen Table 1 matrix, but it cannot reconstruct missing source aggregates.
-3. **Relocation and provenance locks:** original hash checks are intentionally retained. Public path/comment changes change the library-byte hashes used by downstream modules; report/SAP/private derived hashes also refer to the original delivery. These guards will stop a relocated run until an author-reviewed replacement provenance manifest is defined. No assertion has been removed or hash silently recomputed to force a pass.
-4. **No end-to-end rerun validation:** formal reruns were outside closeout scope. Static parsing and mathematical-source comparisons establish source integrity, not independent execution success.
+This is a code-only BMC Gastroenterology submission update. It preserves real analysis implementations and exposes their current dependencies. It is not certified as fully reproducible or as a one-click end-to-end raw-to-submission pipeline.
 
-These limit an end-to-end reproducibility claim; they do not prevent inspecting or manually uploading a code-only repository that states these limitations.
+The initial inventory did not locate the current manuscript. The author subsequently supplied the 2026-10-27 BMC near-submission ZIP integrating L0 non-PH results. Its main DOCX, 14-page Supplementary Information and three figure PDFs were read in memory without extraction or modification. They confirm Table 1, Figures 1–3 and Supplementary Tables S1–S9, including S6 adjusted pathology contrasts, S7 shared-patient decomposition, S8 descriptive surgery groups and S9 L0 PH-model sensitivity. This is source/display reconciliation, not a full independent rerun or final typesetting review.
 
-## Required private layout
-A private working copy must contain its corresponding R code paths and the original expected input/output layout. Set GBC_FINAL_RUN_ROOT to that working copy and GBC_CODE_ROOT to the code root; keep both out of public logs. Preparation code uses GBC_PREPARATION_ROOT and GBC_SEER_MAPPING. The latter points to a private copy of seer_mapping.example.yml with authorized paths, verified export fingerprints and schema. Do not upload this private configuration.
+## Restricted inputs
 
-The locked R readers expect data/analysis_patient_level_v2.parquet and analysis_landmark_long_v2.parquet; outputs/DEVELOPMENT_MODELS.rds and prior aggregate workbooks/reports; spec/SAP_TECHNICAL_ADDENDUM_v1.1.md; private/preparation/outputs/STAGE1_ANALYSIS_REPORT.md and private/preparation/data_clean/01_gallbladder_harmonized_all_2004_2023.parquet. Life-table TXT/DIC belong under data_external/. Figure readers require the named private result workbooks including the master.
+Researchers must obtain their own authorized SEER export and matching dictionary. Neither raw nor derived patient-level data can be obtained from this repository. Required private inputs can include:
 
-Preparation build_cohort() retains a comparison against data_clean/02_strict_main_candidate_2004_2023.parquet. This predecessor is an audit dependency, not the final inclusion rule. Its original source is not substituted silently; resolving or replacing that historical audit is part of the provenance gate.
+- A labels-format 2004–2023 SEER 17 Registries export and its matching dictionary, with the actual exported variable names and verified private schema.
+- data/analysis_patient_level_v2.parquet (7,007 source patients) and data/analysis_landmark_long_v2.parquet, with their original linkage keys and event/time variables.
+- The harmonized all-cause precursor used to obtain 7,100 eligible records, including 93 unresolved cause-of-death records, and the separate 3,796-person life-table subset.
+- The independently obtained official expected-survival TXT/DIC export, with age/year/sex keys and the verified annual-survivors-per-million semantics.
+- outputs/STAGE1_RESULTS_v2.xlsx, outputs/LIFETABLE_RESULTS.xlsx and the original frozen pathology summaries used for reconciliation.
+- phase3_minimal/phase3_results.xlsx for comparing Phase 3B to frozen Phase 3 estimates; it is an input to that check, not generated by invented constants.
+- Raw year and original surgery fields plus the dictionary for Phase 3 C's source-code compatibility audit.
+- Historical audit/support workbooks where explicitly read as historical comparisons, not as current manuscript estimates.
 
-## Exclusions
-No raw/derived patient tables, identifier values, models, bootstrap objects, reports with local runtime paths, manuscript/Supplement/STROBE documents, figure files, screenshots, prompt histories, logs, credentials or aggregate workbooks are distributed. Generated figures and tables require an independent confidentiality review before future publication. Citation author names are retained; private contact details are not included.
+File labels identify input contracts, not bundled files or permission to redistribute them. Patient linkage keys are internal and are not predictors or published example records. Official life-table files are also not redistributed without confirmation of their reuse terms.
 
-## Restore instructions
-Consult environment/README.md. Install the recorded R4.4.3 versions and independently authorized data using supported distribution channels. Do not infer a successful environment restore from current sessionInfo. No renv.lock was invented. Resolve all gates above before claiming this repository reproduces every submission output.
+## Dependency chain that must remain visible
 
-## Run safety
-Model-library autorun defaults are FALSE in public copies. Follow-up and figure files still execute when explicitly sourced. The default submission figure workflow now reads only frozen summary workbooks and the existing group-level Figure 3 CSV. The table CLI reads only frozen summary matrices. Neither invokes the original subgroup CIF calculation, model fitting, bootstraps, cohort harmonization or patient-level table summaries. There is no automated full-analysis launcher.
+Phase 3 intake reuses Phase 2 cohort/risk-set preflight and frozen-result readers, along with the original AJ definitions. Its unified-cohort module reuses the original life-table matching/RMST functions. Its surgery module audits raw code provenance and reuses AJ. Phase 3B reuses the original Phase 3 variable/reference definitions and current CSC integration kernels. Required custom helpers are included with their entry points; missing private data must cause an explicit stop, not a substituted demonstration result.
+
+The isolated CSC functions under scripts/current_kernels are needed by the current analyses even though their original source was a historical model-development module. Keeping these mathematical kernels does not reinstate Model A/B/C as current analyses. The full historical modules are separate under legacy/.
+
+## Environment and output limitations
+
+The original mixed R/Python/Node runtime was not restored independently in this update. environment/ records measured versions and distinguishes original versus later Phase 3/3B runtime use. A list of versions is not a validated lockfile.
+
+Some original workbook exporters use @oai/artifact-tool, an observed private Node package. No unrestricted public installation route was verified. Where that dependency remains, inspect or run the numerical core only with the required environment, or separately validate an I/O-only replacement. Do not change estimation logic to make an exporter work.
+
+Original hash/provenance guards may reference private data, reports, specifications or original source bytes. Relocation and code-path changes can invalidate historical byte locks. They must not be bypassed by deleting assertions or silently replacing expected hashes. An author-reviewed provenance update is a separate requirement for an independent reproduction.
+
+The cohort builder also reads an older strict-candidate parquet as a historical comparison. That comparison is not the final explicit-M0 inclusion rule, but its absent input remains a real execution limitation unless explicitly resolved and documented.
+
+The exact historical FINAL_RESULTS_MASTER workbook and predecessor aggregate-matrix generator were not independently recovered as a complete public pipeline. Figure 2's frozen-CI reader still requires the master schema. The old 11-eTable assembler is legacy, not a current S1–S9 generator. The supplied Figure 1 PDF confirms a new diagnosis-origin design, but its matching plotting source remains to be located. The public Figure 3 adapter matches its scientific content, not the private formatting/QA backend or a pixel-certified submission export. The existing Table 1 formatter omits the new registered-surgery rows, whose real aggregate source is Phase 3 Surgery_Code_Audit.
+
+The supplied manuscript retains an outdated availability sentence saying revised Phase 3 code is not yet public. The author must manually reconcile that sentence after the remote code update is verified; the manuscript and ZIP are not edited here. Confirmed supplementary numbering does not establish that the complete publication-document assembly is available.
+
+## Safe use modes
+
+1. Public syntax and dependency inspection: no patient data or analysis execution required.
+2. Authorized analysis: configure all private input locations and existing runtimes, pass cohort and frozen-result gates, run smoke tests before an independently planned formal analysis.
+3. Frozen-aggregate display export: use the exact documented summary schemas; do not invoke estimation as a missing-input fallback.
+
+This repository synchronization does not rerun the Phase 1–3B formal bootstraps. Syntax/dependency checks and source correspondence do not validate numerical estimates independently.
+
+## Scientific interpretation
+
+Diagnosis is the time origin; eventual resection is a selection characteristic. The estimates do not establish operation-date prognosis or eliminate possible guarantee-time selection. Pathology-standardized contrasts use changing landmark survivor populations and are not causal effects. The main competing-risk and all-cause life-table populations differ; their intervals and time-budget components cannot be mixed. The 3,736-person intersection is a separate sensitivity analysis.
+
+No files here change frozen statistical definitions, point estimates, uncertainty or manuscript content.
