@@ -4,7 +4,7 @@
 
 SEER code for dynamic mortality burden among survivors with recorded resection and harmonized M0 gallbladder adenocarcinoma, NOS (ICD-O-3 8140/3). This is the **BMC Gastroenterology Research Article code version**, not the earlier Scientific Reports/JAMA-oriented package. It does not imply acceptance, a publication DOI, or independent end-to-end reproduction.
 
-**Submission alignment:** the author supplied the 2026-10-27 BMC near-submission package during this update. Its main manuscript, Figures 1–3 and fourteen-page Supplement (Tables S1–S9) were inspected read-only. S6 is adjusted pathology, S7 the unified cohort, S8 surgery codes and S9 L0 non-PH sensitivity. The frozen Phase 1/2/3/3B sources and these actual displays establish the mapping below. The current Figure 1 drawing source was not found, and exact reproduction of all manuscript packaging is not certified: [source/display map](docs/original_script_mapping.md).
+**Submission alignment:** the author supplied the 2026-10-27 BMC near-submission package during this update. Its main manuscript, Figures 1–3 and fourteen-page Supplement (Tables S1–S9) were inspected read-only. S6 is adjusted pathology, S7 the unified cohort, S8 surgery codes and S9 L0 non-PH sensitivity. The frozen Phase 1/2/3/3B sources and these actual displays establish the mapping below. Figure 1 now has an explicitly reconstructed public source; the original plotting source was not recovered. Complete Table 1 export is connected to the frozen surgery summary and actual submission template. Neither addition certifies the complete submission package: [source/display map](docs/original_script_mapping.md).
 
 ## Populations, time origin and interpretation
 
@@ -37,6 +37,7 @@ Seeds, percentile definitions, failure denominators and original scientific gate
 ```text
 python/scripts/              original preparation, landmarks and AJ source
 python/table1_demographics.py  patient-level Table1 formatter
+python/export_table1.py       complete Table1/template-bound display export
 R/09_lifetable/               original life-table source and execution gates
 R/10_figures/                 frozen-summary figure sources/adapters
 phase3_minimal/               pathology / unified-cohort / surgery modules
@@ -94,13 +95,33 @@ For an independently authorized S5 reproduction, `python gbc_transfer_gate/phase
 
 ### C. Display export — existing frozen summaries, no estimation
 
-The supplied submission contains **Table 1 and Figures 1–3; Supplementary Tables S1–S9**. [The map](docs/original_script_mapping.md) and [display contract](R/12_submission_outputs/README.md) identify the confirmed assignments and remaining source gaps. Figure 3 uses the 18-row Phase 3 `Adjusted_Pathology` summary, not the retired group-CIF/complex-support figure. The original Table 1 formatter supplies the demographic/pathology blocks; the manuscript's added surgery rows are documented Phase 3 audit outputs, not yet part of that formatter.
+The supplied submission contains **Table 1 and Figures 1–3; Supplementary Tables S1–S9**. [The map](docs/original_script_mapping.md) and [display contract](R/12_submission_outputs/README.md) identify the confirmed assignments and remaining reproduction limits. Figure 3 uses the 18-row Phase 3 `Adjusted_Pathology` summary, not the retired group-CIF/complex-support figure. The Table 1 formatter now optionally appends the actual frozen `Surgery_Code_Audit` partition; the public exporter validates every cell against the actual manuscript template. These are display operations, not survival estimation, model fitting or bootstrap.
+
+Figure 1 is a **reconstruction**, not recovery of the original plotting source. It reads the frozen cohort-QC `cohort_flow`/`landmark_counts`, life-table `matching_qc` PRIMARY rows and Phase 3 `Unified_Cohort`; counts are input-derived, while fixed counts serve only as stop-on-mismatch checks. No hardcoded fallback replaces missing inputs. Export produces a 170×180 mm vector `Figure1.pdf`, a 300-dpi `Figure1_preview.png` and `Figure1_alignment.json` through R. The self-contained alignment gate measures actual Cairo/grid panel viewports and requires shared top/bottom edges to agree within 1.5 pt; jsonlite is required for its report.
+
+```sh
+Rscript --vanilla R/10_figures/figure1.R --cohort-qc /private/final-run-inputs/outputs/TABLES_INPUTS_REQUIRED/DATA_QC_AND_COHORT_v2.xlsx --life-summary /private/final-run-inputs/outputs/LIFETABLE_RESULTS.xlsx --phase3-summary /private/final-run-inputs/phase3_minimal/phase3_results.xlsx --validate-only
+Rscript --vanilla R/10_figures/figure1.R --cohort-qc /private/final-run-inputs/outputs/TABLES_INPUTS_REQUIRED/DATA_QC_AND_COHORT_v2.xlsx --life-summary /private/final-run-inputs/outputs/LIFETABLE_RESULTS.xlsx --phase3-summary /private/final-run-inputs/phase3_minimal/phase3_results.xlsx --output-dir /private/new-reproduction-output/displays
+```
+
+`--master-check /private/FINAL_RESULTS_MASTER.xlsx` optionally cross-checks the frozen Cohorts sheet. The existing display directory must be inside `GBC_OUTPUT_ROOT`, outside the checkout and configured frozen input roots. All three Figure 1 output names must be absent before export. Calling the script without arguments or with `--help` only prints usage; `--validate-only` reads aggregates and writes nothing. Full aggregate schemas are in [figures/README.md](figures/README.md).
+
+Complete Table 1 uses the authorized descriptive landmark Parquet, the actual Phase 3 surgery-summary XLSX/CSV and the actual near-submission ZIP as the formatting/footnote authority:
+
+```sh
+python python/export_table1.py --landmarks /private/final-run-inputs/data/analysis_landmark_long_v2.parquet --surgery-summary /private/final-run-inputs/phase3_minimal/phase3_results.xlsx --submission-zip /private/BMC-near-submission.zip --validate-only
+python python/export_table1.py --landmarks /private/final-run-inputs/data/analysis_landmark_long_v2.parquet --surgery-summary /private/final-run-inputs/phase3_minimal/phase3_results.xlsx --submission-zip /private/BMC-near-submission.zip --output-dir /private/new-reproduction-output/displays --main-output /private/new-reproduction-output/displays/Main_Manuscript_Table1_assembled.docx
+```
+
+With no arguments or `--help`, the exporter prints usage only. `--validate-only` creates no artifacts. Export requires a pre-existing private output directory outside the checkout and configured input roots and refuses existing output names or collisions with inputs. It writes `Table1.csv`, `Table1.docx`, `Table1_VALIDATION.md` and, only if requested, a separate manuscript assembly DOCX in the same directory. The source ZIP/manuscript are never overwritten. A read-only reconciliation matched all 203 table cells. The actual template uses TableGrid; only local Table 1 borders are changed to the requested three-line format, retaining other values, fonts, indentation and notes. In this engineering check, the assembled manuscript's 13-page Word-native PDF and the standalone one-page Table 1 PDF were reviewed page by page without clipping. That observation applies to the inspected outputs; new exports still require author-specific native visual QA. See [Table 1 inputs and preservation contract](R/11_tables/README.md).
+
+Table 1 authoring uses `lxml`, not `python-docx`. One interpreter may supply all declared dependencies. Alternatively, append `--data-python /path/to/existing-data-python` to use an existing pandas/pyarrow/openpyxl interpreter for the read-only aggregation bridge; it receives no document-writing job. The authoring interpreter still needs lxml. No new analysis environment or model is created by this bridge.
 
 ```sh
 Rscript --vanilla R/10_figures/current_figure3.R --input /private/phase3_results.xlsx --output /private/new-reproduction-output/displays/Figure3.pdf
 ```
 
-This generic public exporter reads actual summaries and does not refit models. Set `GBC_CODE_ROOT` and `GBC_OUTPUT_ROOT`; create the output parent first. New display outputs must be inside the protected output root and must not already exist. Figure 2 additionally requires `GBC_SUBMISSION_OUTPUT/Main` inside that root. Drawing sources preserve the scientific plot specification, but pixel-identical export was not recertified. The supplied Figure 1 has the current diagnosis-origin design; its actual drawing code is missing locally, so legacy code is not falsely presented as its source. No single command claims to regenerate every submission file from absent data/aggregates.
+This generic public Figure 3 exporter reads actual summaries and does not refit models. Set `GBC_CODE_ROOT` and `GBC_OUTPUT_ROOT` in the process launching R; create the output parent first. New display outputs must be inside the protected output root and must not already exist. Figure 2 additionally requires `GBC_SUBMISSION_OUTPUT/Main` inside that root. Drawing sources preserve the scientific plot specification, but pixel-identical export was not recertified. The supplied Figure 1 diagnosis-origin design is implemented by the documented public reconstruction, not falsely attributed to legacy code. No single command claims to regenerate every submission file from absent private data, summaries or templates.
 
 ## Data access and licensing
 
@@ -114,7 +135,7 @@ The existing [MIT license](LICENSE) covers original software/documentation only,
 
 The current executed analysis uses **R4.4.3 / survival3.8.3**, with strict version checks. Recent Phase2/3 Python was3.13.3; original Stage1 used a separate recorded environment. [Environment records](environment/README.md) distinguish these; a new lockfile is not presented as a validated historical restore.
 
-The update preserves statistical definitions, does not substitute simulated inputs or suppress failed draws, and did not rerun formal bootstraps. Mathematical-source checks and parsing do **not** justify a claim of fully reproducible or one-click end-to-end execution. Authorized data, frozen inputs, original provenance gates, the missing current Figure 1 source and private document assembly remain limitations. The supplied manuscript's data-availability paragraph still says revised Phase 3 code is not public; after this update is pushed and verified, the author must manually reconcile that sentence. No manuscript is edited here.
+The update preserves statistical definitions, does not substitute simulated inputs or suppress failed draws, and did not rerun formal bootstraps. Mathematical-source checks, bounded visual QA and parsing do **not** justify a claim of fully reproducible or one-click end-to-end execution. Authorized data, frozen summaries, original provenance gates and the actual private document template remain required; the original Figure 1 source was not recovered, and its public reconstruction is explicitly labelled. Full S1–S9 document assembly and private Figure 3 typography are not independently reproduced by these additions. The supplied October 28 template already cites analysis version `a087042` and describes restricted inputs; the engineering follow-up does not alter that original analysis citation or other manuscript text. Source manuscripts and archives are unchanged; optional Table 1 assembly creates a separate copy. The inspected Word-native outputs and Figure 1 physical glyph/geometry checks passed their stated scope, not an independent replication of the full analysis or blanket approval of every submission file. Release identity is recorded in Git history.
 
 ## AI assistance
 

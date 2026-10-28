@@ -25,9 +25,10 @@ Time is measured from diagnosis. Inclusion uses the eventual registry resection 
 | Phase 3B L0 sensitivity | phase3_l0_ph_check/run_L0_PH_check.R and its local helpers | S9 original PH, PATH_TV and exploratory AGE_TV; L0 only |
 | Current pathology display | R/10_figures/current_figure3.R | Draws the 18-row Adjusted_Pathology aggregate; no new estimation in the plotting function |
 | Frozen Figure 2 source | R/10_figures/figure2.R | Confirmed CIF/RMTL/RMST/horizon-difference scientific content; master CI input required; no pixel-certified re-export claimed |
-| Table 1 partial formatter | python/table1_demographics.py: build_table1 | Age/sex/race/pathology blocks from authorized records; the submission's added surgery rows are sourced from Phase 3 Surgery_Code_Audit and are not yet in this formatter |
+| Complete Table 1 display | python/table1_demographics.py and python/export_table1.py | Original age/sex/race/pathology blocks plus actual frozen surgery partition; all 203 cells checked against the real private template, with optional new manuscript-copy export and no models/bootstrap |
+| Reconstructed Figure 1 | R/10_figures/figure1.R | Display-only reconstruction from cohort QC, life matching QC and Phase 3 Unified_Cohort; original plotting source was not recovered |
 
-R/01–04 document original Python implementations rather than claiming an invented R pipeline. The supplied Figure 1 PDF confirms cohort derivation and the diagnosis-origin source/dynamic/life-table design; the actual matching source remains to be located. The older legacy source with prediction-model tracks is not its approved replacement.
+R/01–04 document original Python implementations rather than claiming an invented R pipeline. The supplied Figure 1 PDF confirms cohort derivation and the diagnosis-origin source/dynamic/life-table design. Its original source was not recovered; the public reconstructed source now reads and cross-checks frozen aggregates without hardcoded fallbacks. The older legacy source with prediction-model tracks is not its approved replacement.
 
 ## Three different kinds of use
 
@@ -43,9 +44,9 @@ The original main preparation/AJ functions are a library rather than a complete 
 
 ### C. Submission figure/table export
 
-Plotting or formatting existing aggregates is separate from estimating those aggregates. Figure 3 can use the Phase 3 Adjusted_Pathology output; its public adapter does not reproduce private typesetting/QA or certify pixel identity. Figure 2 requires its frozen summary workbook schemas. The actual supplement confirms S6 adjusted pathology, S7 shared-cohort decomposition, S8 surgery groups and S9 L0 PH sensitivity; the full current S1–S9 document assembler is still not independently recovered. See R/12_submission_outputs/README.md.
+Plotting or formatting existing aggregates is separate from estimating those aggregates. Figure 1 now has a clearly labelled aggregate-driven reconstruction, with PDF, PNG and actual-viewport alignment JSON outputs; all three must be absent before export. Complete Table 1 combines authorized descriptive records, actual frozen surgery summaries and the real private manuscript ZIP; no models or bootstrap are invoked. Its export creates new files and refuses overwriting inputs/existing outputs. The engineering check included page-by-page native Word review of the 13-page assembled manuscript and one-page Table 1 without clipping. New exports still require author-specific native visual QA. Figure 3 can use the Phase 3 Adjusted_Pathology output; its public adapter does not reproduce private typesetting/QA or certify pixel identity. Figure 2 requires its frozen summary workbook schemas. The actual supplement confirms S6 adjusted pathology, S7 shared-cohort decomposition, S8 surgery groups and S9 L0 PH sensitivity; the full current S1–S9 document assembler is still not independently recovered. See R/12_submission_outputs/README.md.
 
-The manuscript's availability paragraph still describes revised Phase 3 code as not yet integrated into GitHub. After remote verification, the author must manually reconcile it with the public release. No manuscript, ZIP or supplementary PDF is changed by this workflow.
+The supplied October 28 manuscript template already cites analysis version a087042 and restricted-input requirements. The engineering follow-up preserves that original analysis citation and all other manuscript text; the source manuscript, ZIP and supplementary PDF are unchanged. The optional Table 1 assembly is a separate copy with the declared local table-border changes only.
 
 ## Historical analyses
 

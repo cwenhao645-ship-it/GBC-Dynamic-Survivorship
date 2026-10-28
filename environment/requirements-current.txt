@@ -4,3 +4,6 @@ pandas==2.3.3
 pyarrow==23.0.1
 openpyxl==3.1.5
 PyYAML==6.0.3
+# Display-only Table1 OOXML export; measured existing authoring runtime 2026-10-28.
+# Not a statistical-model dependency; python-docx is not used by this exporter.
+lxml==6.1.1
